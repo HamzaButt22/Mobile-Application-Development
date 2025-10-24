@@ -1,57 +1,44 @@
-import '../models/data_models.dart';
+import 'package:flutter/material.dart';
 
-// ============================================================================
-// HELPER FUNCTIONS AND UTILITY LOGIC
-// ============================================================================
-
-// CS Fundamentals: Personalized Routine Logic with if/else
-String getRoutine(UserProfile user) {
-  if (user.sex == 'male' && user.goal == 'gain') {
-    return 'Beginner Bulk Program';
-  } else if (user.sex == 'male' && user.goal == 'lose') {
-    return 'Male Fat Loss Program';
-  } else if (user.sex == 'female' && user.goal == 'gain') {
-    return 'Female Strength Builder';
-  } else {
-    return 'Female Toning Program';
+class FitnessHelpers {
+  // Business Logic - Volume Calculation
+  static double calculateTotalVolume(List<dynamic> logs) {
+    if (logs.isEmpty) return 0.0;
+    return logs.fold(0.0, (sum, log) => sum + (log.totalVolume ?? 0.0));
   }
-}
 
-// CS Fundamentals: Calculation Logic using loops
-double calculateWeeklyVolume(List<WorkoutLog> workoutLogs) {
-  double volume = 0;
-  for (var log in workoutLogs) {
-    volume += log.weightLifted * log.reps * log.sets;
+  // Business Logic - Calorie Calculation
+  static int calculateTotalCalories(List<dynamic> logs) {
+    if (logs.isEmpty) return 0;
+    num total = logs.fold<num>(0, (sum, log) => sum + (log.calories ?? 0));
+    return total.toInt();
   }
-  return volume;
-}
 
-double calculateDailyCalories(List<FoodEntry> foodEntries) {
-  double calories = 0;
-  for (var entry in foodEntries) {
-    if (!entry.isSleepLog) {
-      calories += entry.calories;
-    }
+  // Business Logic - Average Calculation
+  static double calculateAverage(List<dynamic> logs, double Function(dynamic) getValue) {
+    if (logs.isEmpty) return 0.0;
+    double sum = logs.fold(0.0, (sum, log) => sum + getValue(log));
+    return sum / logs.length;
   }
-  return calories;
-}
 
-double calculateTotalWater(List<FoodEntry> foodEntries) {
-  double total = 0;
-  for (var entry in foodEntries) {
-    total += entry.waterAmount;
+  // Date Formatting
+  static String formatDate(DateTime date) {
+    return '${date.day}/${date.month}/${date.year}';
   }
-  return total;
-}
 
-double calculateSleepScore(List<FoodEntry> foodEntries) {
-  double totalSleep = 0;
-  int sleepLogs = 0;
-  for (var entry in foodEntries) {
-    if (entry.isSleepLog) {
-      totalSleep += entry.sleepDuration;
-      sleepLogs++;
-    }
+  // BMI Category
+  static String getBMICategory(double bmi) {
+    if (bmi < 18.5) return 'Underweight';
+    if (bmi < 25) return 'Normal';
+    if (bmi < 30) return 'Overweight';
+    return 'Obese';
   }
-  return sleepLogs > 0 ? (totalSleep / sleepLogs) * 10 : 0;
+
+  // Color for BMI
+  static Color getBMIColor(double bmi) {
+    if (bmi < 18.5) return Colors.blue;
+    if (bmi < 25) return Colors.green;
+    if (bmi < 30) return Colors.orange;
+    return Colors.red;
+  }
 }

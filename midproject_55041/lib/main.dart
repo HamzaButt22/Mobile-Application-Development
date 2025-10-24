@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'screens/main_screen.dart';
+import 'screens/splash_screen.dart';
 
 void main() {
-  runApp(const FitnessApp());
+  runApp(const AdaptiveFitnessHub());
 }
 
-class FitnessApp extends StatelessWidget {
-  const FitnessApp({Key? key}) : super(key: key);
+class AdaptiveFitnessHub extends StatelessWidget {
+  const AdaptiveFitnessHub({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,9 +14,20 @@ class FitnessApp extends StatelessWidget {
       title: 'Adaptive Fitness Hub',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: Colors.grey[100],
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.light,
+        ),
       ),
-      home: const MainScreen(),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.dark,
+        ),
+      ),
+      home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
